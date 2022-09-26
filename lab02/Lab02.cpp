@@ -36,15 +36,15 @@ struct Point {
  private:
      Point right_up_angle_;
  public:
-     Rectangle();
-     Rectangle(Point const &right_up_angle);
+     Rectangle(); //объявили конструктор без параметров для создания прямоугольника с правым верхним углом в начале координат
+     Rectangle(Point const &right_up_angle); //объявили конструктор конструктор с одним параметром Point const & для создания прямоугольника с правым верхним углом в заданной точке
 
-     Rectangle operator+(Rectangle const &other) const;
-     Rectangle operator*(Rectangle const &other) const;
+     Rectangle operator+(Rectangle const &other) const;//объявили метод Rectangle operator+(Rectangle const &rha) const
+     Rectangle operator*(Rectangle const &other) const;//объявили метод Rectangle operator*(Rectangle const &rha) const
 
-     void print() const;
+     void print() const; //для печати на экране координаты правого верхнего угла прямоугольника
 
-     Point RightUpAngle() const;
+     Point RightUpAngle() const; //публичный метод, возвращающий точку прямоугольника
 
  };
 
@@ -52,7 +52,7 @@ struct Point {
  Rectangle::Rectangle(Point const &right_up_angle) : right_up_angle_(right_up_angle) {};
 
  Rectangle Rectangle::operator+(Rectangle const &other) const{
-     Point maxy = other.right_up_angle_.maxy(right_up_angle_);
+     Point maxy = other.right_up_angle_.maxy(right_up_angle_); // y берет максимальный из other.right_up_angle_ и right_up_angle_, а x - из other.right_up_angle_
      Point result = maxy.maxx(right_up_angle_);
      return Rectangle(result);
  }
@@ -77,7 +77,7 @@ int main () {
  std::getline (std::cin, expression);
 
  std::string parsed;
- std::stack <char> stack;
+ std::stack <char> stack; //stack - это стек char-ов
 
  for (size_t i = 0; i < expression.size(); i++){
     if (expression[i] == '('){
@@ -118,29 +118,30 @@ int main () {
      stack.pop();
  }
 
- std::stack <std::pair<unsigned long long, unsigned long long>> result;
+ //Теперь надо раскодировать строку parsed
+ std::stack <std::pair<unsigned long long, unsigned long long>> result; //result - это стек пар
  for (size_t i = 0; i < parsed.size(); i++){
     if(parsed[i] == '('){
         std::pair<unsigned long long, unsigned long long> pair = {0,0}; //pair - это структура
         i++;
-        while(parsed[i] != ','){
+        while(parsed[i] != ','){ //добавляем первое число в первое чило пары
             pair.first *= 10;
             pair.first += parsed[i++] - '0'; //т.к. parsed[i] - это char, чтобы получить нужное нам значение, нужно вычесть код нуля
         }
         i++;
-        while(parsed[i] != ')'){
+        while(parsed[i] != ')'){ //добавляем второе число во второе чило пары
             pair.second *= 10;
             pair.second += parsed[i++] - '0';
         }
-        result.push(pair);
+        result.push(pair); //добавляем пару (точку прямоугольника) в список пар
     }
 
     if(parsed[i] == '+'){
-        Point first(result.top().first, result.top().second);
+        Point first(result.top().first, result.top().second); //достаем из стека result первый прямоугольник (создаем первую точку first)
         result.pop();
-        Point second(result.top().first, result.top().second);
+        Point second(result.top().first, result.top().second); //достаем из стека result второй прямоугольник (создаем вторую точку second)
         result.pop();
-        Rectangle first_rec(first);
+        Rectangle first_rec(first); //создаем прямоугольники по точкам
         Rectangle second_rec(second);
         Rectangle sum = first_rec + second_rec;
         result.push({sum.RightUpAngle().x, sum.RightUpAngle().y});
