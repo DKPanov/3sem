@@ -7,7 +7,7 @@ struct Comparator{
 };
 
 struct IntComparator final : Comparator<int>{
-    bool operator() (int const & lha , int const & rha) const override {
+    bool operator() (int const& lha , int const& rha) const override {
         return lha < rha;
     }
 };
