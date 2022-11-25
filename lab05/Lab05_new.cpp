@@ -20,7 +20,7 @@ public:
     }
 
     //правило пяти
-    Grid(Grid<T> const& other) : 
+    Grid(Grid<T> const& other) : //конструктор копирования
         data(new T[other.x_size * other.y_size]), 
         y_size(other.y_size), 
         x_size(other.x_size) {//при копировании создаем копию и туда помещаем
@@ -29,11 +29,11 @@ public:
         }
     };
 
-    Grid(Grid<T>&& other) : data(other.data), y_size(other.y_size), x_size(other.x_size) {
+    Grid(Grid<T>&& other) : data(other.data), y_size(other.y_size), x_size(other.x_size) { //конструктор перемещения
         other.data = nullptr;
     };
-    Grid<T>& operator=(Grid<T>& other) {
-        if (this == &other){//если адреса объектов слева и справа от рано совпадают
+    Grid<T>& operator=(Grid<T>& other) { //оператор копирующего присваивания
+        if (this == &other){//если адреса объектов слева и справа от равно совпадают
             return *this;
         }
         T* new_data = new T[other.x_size * other.y_size]; //выделяем память под новый блок
@@ -47,8 +47,8 @@ public:
         return *this;
     };
 
-    Grid<T>& operator=(Grid<T>&& other) {
-        if (this == &other) {//если адреса объектов слева и справа от рано совпадают
+    Grid<T>& operator=(Grid<T>&& other) { //оператор перемещающего присваивания
+        if (this == &other) {//если адреса объектов слева и справа от равно совпадают
             return *this;
         }
         delete[] data;
@@ -59,7 +59,7 @@ public:
         return *this;
     };
 
-    ~Grid() {
+    ~Grid() { //деструктор
         delete[] data;
     }
 
@@ -67,7 +67,7 @@ public:
         return data[y_idx * x_size + x_idx];
     }
 
-    T& operator() (size_type y_idx, size_type x_idx) {//возвращаентся ссылка нв оригинадьный объект, объект можно поменять(метод не константный)
+    T& operator() (size_type y_idx, size_type x_idx) {//возвращаентся ссылка на оригинальный объект, объект можно поменять(метод не константный)
         return data[y_idx * x_size + x_idx];
     }
 
@@ -80,7 +80,7 @@ public:
     }
 
     Grid<T>& operator=(T const& t) {
-        for (auto it = data, end = data + x_size * y_size; //end - указатель на первую ячейку, кот нам не принадлежит
+        for (auto it = data, end = data + x_size * y_size; //end - указатель на первую ячейку, которая нам не принадлежит
             it != end; ++it) *it = t;
         return *this;
     }
